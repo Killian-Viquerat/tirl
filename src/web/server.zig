@@ -90,7 +90,7 @@ pub const JobStore = struct {
 };
 
 pub fn run(alloc: std.mem.Allocator, port: u16, io: std.Io) !void {
-    var addr: std.Io.net.IpAddress = .{ .ip4 = .loopback(port) };
+    var addr = try std.Io.net.IpAddress.parse("0.0.0.0", port);
     var server = try std.Io.net.IpAddress.listen(&addr, io, .{ .reuse_address = true });
     defer server.deinit(io);
 
