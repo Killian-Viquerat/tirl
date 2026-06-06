@@ -1,15 +1,21 @@
 receivers:
   profiling:
     samples_per_second: 97
+    send_error_frames: true
+    verbose_mode: true
 
 exporters:
-  otlp_grpc:
-    endpoint: pyroscope:4040
+  otlp/pyroscope:
+    endpoint: http://pyroscope:4040
     tls:
       insecure: true
+      insecure_skip_verify: true
 
 service:
+  telemetry:
+    logs:
+      level: debug
   pipelines:
     profiles:
       receivers: [profiling]
-      exporters: [otlp_grpc]
+      exporters: [otlp/pyroscope]

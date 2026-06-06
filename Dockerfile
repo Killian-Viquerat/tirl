@@ -9,7 +9,7 @@ COPY src/ src/
 
 RUN zig build -Doptimize=ReleaseSafe -Dtarget=x86_64-linux-musl -Dgui=false --summary all
 
-FROM scratch
+FROM alpine:3.22
 
 COPY --from=build /app/zig-out/bin/zig_scene_web /zig_scene_web
 

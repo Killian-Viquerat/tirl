@@ -2,8 +2,8 @@ services:
   # Service to instrument.
   tirl:
     build: .
+    pid: "host"
     ports:
-      # Exposes port 8080, forwarding it to container port 8443
       - '8080:8080'
     networks:
       - otel-net
@@ -23,20 +23,22 @@ services:
       - otel-net
 
   # Profiling CPU/mémoire
-  otel-ebpf-profiler:
-    image: otel/opentelemetry-collector-ebpf-profiler:0.147.0
+  alloy:
+    image: grafana/alloy:latest
     command:
-      - --config=/etc/ebpf-profiler-config.yaml
-      - --feature-gates=service.profilesSupport
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - /etc/alloy/config.alloy
     privileged: true
     pid: "host"
     volumes:
-      - ./config/ebpf-profiler-config.yaml:/etc/ebpf-profiler-config.yaml:z
-      - /sys/kernel:/sys/kernel:ro
-      - /proc:/proc:ro
-      - /lib/modules:/lib/modules:ro
+      - ./config/alloy-config.alloy:/etc/alloy/config.alloy:z
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "12345:12345"
     depends_on:
       - pyroscope
+      - tirl
     networks:
       - otel-net
 

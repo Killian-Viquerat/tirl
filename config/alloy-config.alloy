@@ -1,0 +1,24 @@
+discovery.docker "local_containers" {
+  host = "unix:///var/run/docker.sock"
+}
+
+discovery.relabel "tirl_only" {
+  targets = discovery.docker.local_containers.targets
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = ".*tirl.*"
+    action        = "keep"
+  }
+}
+
+pyroscope.ebpf "instance" {
+  forward_to = [pyroscope.write.endpoint.receiver]
+  targets    = discovery.relabel.tirl_only.output
+}
+
+pyroscope.write "endpoint" {
+  endpoint {
+    url = "http://pyroscope:4040"
+  }
+}

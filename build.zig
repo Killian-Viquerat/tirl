@@ -22,6 +22,8 @@ pub fn build(b: *std.Build) void {
             .root_source_file = b.path("src/main.zig"),
             .target = target,
             .optimize = optimize,
+            .strip = false,
+            .unwind_tables = .sync,
             .imports = &.{
                 .{ .name = "zig_scene", .module = mod },
             },
@@ -56,6 +58,8 @@ pub fn build(b: *std.Build) void {
                 .root_source_file = b.path("src/gui_main.zig"),
                 .target = target,
                 .optimize = optimize,
+                .strip = false,
+                .unwind_tables = .sync,
                 .imports = &.{
                     .{ .name = "zig_scene", .module = mod },
                     .{ .name = "raylib", .module = raylib_dep.module("raylib") },
@@ -99,6 +103,8 @@ pub fn build(b: *std.Build) void {
             .root_source_file = b.path("src/print_ast.zig"),
             .target = target,
             .optimize = optimize,
+            .strip = false,
+            .unwind_tables = .sync,
             .imports = &.{
                 .{ .name = "zig_scene", .module = mod },
             },
@@ -119,6 +125,8 @@ pub fn build(b: *std.Build) void {
             .root_source_file = b.path("src/web_main.zig"),
             .target = target,
             .optimize = optimize,
+            .strip = false,
+            .unwind_tables = .sync,
             .imports = &.{
                 .{ .name = "zig_scene", .module = mod },
             },

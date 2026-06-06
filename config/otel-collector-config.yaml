@@ -1,0 +1,17 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+exporters:
+  pyroscope:
+    endpoint: http://pyroscope:4040
+    tls:
+      insecure: true
+
+service:
+  pipelines:
+    profiles:
+      receivers: [otlp]
+      exporters: [pyroscope]
